@@ -1,42 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Cardlist from './Cardlist';
 import Searchbox from './Searchbox.js';
 import './App.css';
 
-class App extends React.Component {
-    constructor() {
-        super()
-        this.state = {
-            robots: [],
-            searchField: ''
-        }
-    }
+function App() {
 
-    componentDidMount() {
+    const [robots, setRobots] = useState([]);
+    const [searchField, setSearchField] = useState('');
+    // constructor() {
+    //     super()
+    //     this.state = {
+    //         robots: [],
+    //         searchField: ''
+    //     }
+    // }
+    useEffect(() => {
         fetch('https://jsonplaceholder.typicode.com/users')
             .then(response => response.json())
-            .then(users => this.setState({ robots: users }));
+            .then(users => {setRobots(users)});
+    }, []);
+    // componentDidMount()  {
+    //     fetch('https://jsonplaceholder.typicode.com/users')
+    //         .then(response => response.json())
+    //         .then(users => setRobots(users));
+    // }
+    const onSearchChange = (event) => {
+        setSearchField(event.target.value)
     }
-    onSearchChange = (event) => {
-        this.setState({ searchField: event.target.value })
-    }
-    render() {
-        const filterRobots = this.state.robots.filter(robots => {
-            return robots.name.toLowerCase().includes(this.state.searchField.toLowerCase())
-        })
 
-        if (this.state.robots.length === 0) {
-            return <h1>Loading</h1>
-        }
-        else {
-            return (
-                <div className="tc">
-                    <h1 className='f2'>RoboFirends</h1>
-                    <Searchbox searchchange={this.onSearchChange} />
-                    <Cardlist robotDetails={filterRobots} />
-                </div>
-            );
-        }
-    }
+    const filterRobots = robots.filter(robots => {
+        return robots.name.toLowerCase().includes(searchField.toLowerCase());
+    })
+    return !robots.length ?
+        <h1>Loading</h1> :
+        (
+            <div className='tc'>
+                <h1 className='f1'>RoboFriends</h1>
+                {/* <button onClick={()=>setCount(count+1)}>Click Me!</button> */}
+                <Searchbox searchChange={onSearchChange} />
+                <Cardlist robotDetails={filterRobots} />
+
+            </div>
+        );
 }
 export default App;

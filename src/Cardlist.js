@@ -4,7 +4,9 @@ import Card from './Card'
 const Cardlist = ({ robotDetails }) => {
 
     return (
-        robotDetails.map((bro, i) => {
+        <div>
+            {
+        robotDetails.map((users, i) => {
             return <Card
                 key={i}
                 name={robotDetails[i].name}
@@ -12,8 +14,9 @@ const Cardlist = ({ robotDetails }) => {
                 email={robotDetails[i].email}
             />;
         })
-    );
-};
+}</div>
+);
+}
 
 
 export default Cardlist;
